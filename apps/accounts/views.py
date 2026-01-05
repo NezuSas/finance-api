@@ -13,4 +13,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
-        return self.request.user
+        user = self.request.user
+        # Ensure profile exists (Lazy creation)
+        Profile.objects.get_or_create(user=user)
+        return user
