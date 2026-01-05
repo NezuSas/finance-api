@@ -167,11 +167,24 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGIN_LIST = os.environ.get('CORS_ALLOWED_ORIGINS', 'https://finance.nezuecuador.com').split(',')
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in CORS_ALLOWED_ORIGIN_LIST if origin.strip()]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = os.environ.get('CORS_ALLOW_ALL', 'False') == 'True'
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = False # We use JWT in LocalStorage, no need for cookies/credentials
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # CSRF Configuration
-CSRF_TRUSTED_ORIGIN_LIST = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://finance.nezuecuador.com,https://finance-api.nezuecuador.com').split(',')
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in CSRF_TRUSTED_ORIGIN_LIST if origin.strip()]
+CSRF_TRUSTED_ORIGINS = [
+    'https://finance.nezuecuador.com',
+    'https://finance-api.nezuecuador.com',
+]
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
