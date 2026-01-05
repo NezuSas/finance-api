@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ki3o^qub)60=rx!-g!8hc1(1nd+uf(%)4qjp=vt(oh)22%^q*b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['*'] # Se recomienda restringir en producción
+ALLOWED_HOSTS = ['finance-api.nezuecuador.com', 'localhost', '127.0.0.1']
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 
@@ -164,13 +164,16 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = True # Change in production
+CORS_ALLOWED_ORIGINS = [
+    'https://finance.nezuecuador.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF Configuration
 CSRF_TRUSTED_ORIGINS = [
+    'https://finance.nezuecuador.com',
+    'https://finance-api.nezuecuador.com',
     'https://*.ngrok-free.app',
-    'https://8160bbd84186.ngrok-free.app',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
 ]
