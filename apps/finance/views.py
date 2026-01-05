@@ -93,7 +93,46 @@ class SyncView(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def push(self, request):
         data = request.data
-        # Batch processing of transactions, payments, etc.
-        # This is where conflict resolution logic goes.
-        # For MVP, we'll just save what comes if it doesn't conflict.
+        user = request.user
+
+        # 1. Process Transactions
+        transactions_data = data.get('transactions', [])
+        for item in transactions_data:
+            tx_id = item.get('id')
+            # Remove read-only or non-model fields
+            item.pop('is_synced', None)
+            item.pop('type_display', None)
+            item.pop('method_display', None)
+            
+            Transaction.objects.update_or_create(
+                id=tx_id,
+                user=user,
+                defaults=item
+            )
+
+        # 2. Process Scheduled Payments
+        payments_data = data.get('payments', [])
+        for item in payments_data:
+            p_id = item.get('id')
+            item.pop('is_synced', None)
+            item.pop('status_display', None)
+            
+            ScheduledPayment.objects.update_or_create(
+                id=p_id,
+                user=user,
+                defaults=item
+            )
+
+        # 3. Process Weekly Periods
+        weeks_data = data.get('weeks', [])
+        for item in weeks_data:
+            w_id = item.get('id')
+            item.pop('is_synced', None)
+            
+            WeeklyPeriod.objects.update_or_create(
+                id=w_id,
+                user=user,
+                defaults=item
+            )
+
         return Response({'status': 'sync complete'})
