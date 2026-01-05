@@ -26,8 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ki3o^qub)60=rx!-g!8hc1(1nd+uf(%)4qjp=vt(oh)22%^q*b'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['finance-api.nezuecuador.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'finance-api.nezuecuador.com,localhost,127.0.0.1').split(',')
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+# Render Proxy support
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
@@ -164,16 +167,11 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    'https://finance.nezuecuador.com',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-]
+CORS_ALLOWED_ORIGIN_LIST = os.environ.get('CORS_ALLOWED_ORIGINS', 'https://finance.nezuecuador.com').split(',')
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in CORS_ALLOWED_ORIGIN_LIST if origin.strip()]
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = os.environ.get('CORS_ALLOW_ALL', 'False') == 'True'
 
 # CSRF Configuration
-CSRF_TRUSTED_ORIGINS = [
-    'https://finance.nezuecuador.com',
-    'https://finance-api.nezuecuador.com',
-    'https://*.ngrok-free.app',
-]
+CSRF_TRUSTED_ORIGIN_LIST = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://finance.nezuecuador.com,https://finance-api.nezuecuador.com').split(',')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in CSRF_TRUSTED_ORIGIN_LIST if origin.strip()]
