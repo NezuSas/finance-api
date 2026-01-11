@@ -2,6 +2,9 @@ import os
 import django
 from django.urls import get_resolver, URLPattern, URLResolver
 
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
